@@ -1,0 +1,154 @@
+---
+title: "Maximum Profit - Weigelt Corporation using Dual Solution"
+author: "Srushti Padade"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+# Simplex Method, Duality Theory and Sensitivity Analysis
+
+## Question:
+
+The Weigelt Corporation has three branch plants with excess production capacity. Fortunately, the corporation has a new product ready to begin production, and all three plants have this capability, so some of the excess capacity can be used in this way. This product can be made in three sizes--large, medium, and small--that yield a net unit profit of $420, $360, and $300, respectively. Plants 1, 2, and 3 have the excess capacity to produce 750, 900, and 450 units per day of this product, respectively, regardless of the size or combination of sizes involved.
+
+The amount of available in-process storage space also imposes a limitation on the production rates of the new product. Plants 1, 2, and 3 have 13,000, 12,000, and 5,000 square feet, respectively, of in-process storage space available for a day's production of this product. Each unit of the large, medium, and small sizes produced per day requires 20, 15, and 12 square feet, respectively.
+
+Sales forecasts indicate that if available, 900, 1,200, and 750 units of the large, medium, and small sizes, respectively, would be sold per day.At each plant, some employees will need to be laid off unless most of the plant's excess production capacity can be used to produce the new product. To avoid layoffs if possible, management has decided that the plants should use the same percentage of their excess capacity to produce the new product.
+
+Management wishes to know how much of each of the sizes should be produced by each of the plants to maximize profit.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(lpSolveAPI)
+```
+
+### To read the  LP file.
+
+```{r}
+Weight_Corporation_object <- read.lp("Weigeit_Coporation.lp")
+
+Weight_Corporation_object
+```
+
+### To solve the LP.
+
+```{r}
+solve(Weight_Corporation_object)
+```
+
+### To compute the objective function value.
+
+```{r}
+get.objective(Weight_Corporation_object)
+
+```
+
+### To compute the values of decision variables.
+
+```{r}
+get.variables(Weight_Corporation_object)
+```
+
+### To compute the values of constraints.
+
+```{r}
+get.constraints(Weight_Corporation_object)
+
+```
+
+### To compute Shadow price
+
+```{r}
+get.sensitivity.rhs(Weight_Corporation_object)$duals[1:11]
+```
+
+### To compute Reduced cost.
+
+```{r}
+get.sensitivity.rhs(Weight_Corporation_object)$duals[12:20]
+```
+
+### To compute the dual solution
+
+```{r}
+get.dual.solution(Weight_Corporation_object)
+
+get.sensitivity.rhs(Weight_Corporation_object)
+```
+
+### To compute the range of shadow price for which the optimal solution remains unchanged.
+
+```{r}
+cbind(Shadow_Price=get.sensitivity.rhs(Weight_Corporation_object)$duals[1:11], Lower_bound=get.sensitivity.rhs(Weight_Corporation_object)$dualsfrom[1:11], Upper_bound=get.sensitivity.rhs(Weight_Corporation_object)$dualstill[1:11])
+```
+
+### To compute the range of shadow price for which the optimal solution remains unchanged.
+
+```{r}
+
+cbind(Reduced_Cost=get.sensitivity.rhs(Weight_Corporation_object)$duals[12:20], Lower_bound=get.sensitivity.rhs(Weight_Corporation_object)$dualsfrom[12:20], Upper_bound=get.sensitivity.rhs(Weight_Corporation_object)$dualstill[12:20])
+
+```
+
+### The Dual of the Weiglt Coporation problem:
+
+Objective function:
+
+minz = 750 y1 + 900 y2 + 450 y3 + 13000 y4 + 12000 y5 + 5000 y6 + 900 y7 + 1200 y8 + 750 y9;
+
+Subject to
+
+y1 + 20 y4 + y7 + 900 y10 + 450 y11 >= 420;
+
+y1 + 15 y4 + y8 + 900 y10 + 450 y11 >= 360;
+
+y1 + 12 y4 + y9 + 900 y10 + 450 y11 >= 300;
+
+y2 + 20 y5 + y7 - 750 y10 >= 420;
+
+y2 + 15 y5 + y8 - 750 y10 >= 360;
+
+y2 + 12 y5 + y9 - 750 y10 >= 300;
+
+y3 + 20 y6 + y7 - 750 y11 >= 420;
+
+y3 + 15 y6 + y8 - 750 y11 >= 360;
+
+y3 + 12 y6 + y9 - 750 y11 >= 300;
+
+And
+
+y1, y2, ....., y9 >= 0;
+
+y10, y11 unrestricted; 
+
+Thus, 
+Lets replace y10 = y10_1 - y10_2 and y11 = y11_1 - y11_2, 
+where y10_1, y10_2, y11_1, y11_2 >=0;  
+
+### To solve the dual of the Weight_Corporation
+
+```{r}
+
+Dual_WC <- read.lp("Dual_Weigeit_Corporation.lp")
+
+set.bounds(Dual_WC, lower = c(0,0,0,0,0,0,0,0,0,-Inf,-Inf), upper = rep(Inf,11))
+
+solve(Dual_WC)
+
+get.objective(Dual_WC)
+
+get.constraints(Dual_WC)
+
+get.variables(Dual_WC)
+
+get.sensitivity.rhs(Dual_WC)
+
+get.dual.solution(Dual_WC)
+```
+
+##### Thus we can see that the Optimal Solution value is same for both primal and dual problem.

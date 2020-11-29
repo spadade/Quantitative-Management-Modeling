@@ -1,0 +1,90 @@
+---
+title: "Integer Programming"
+author: "Srushti Padade"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+Consider the following activity-on-arc project network, where the 12 arcs (arrows) represent the 12 activities (tasks) that must be performed to complete the project and the network displays the order in which the activities need to be performed. The number next to each arc (arrow) is the time required for the corresponding activity. Consider the problem of finding the longest path (the largest total time) through this network from start (node 1) to finish (node 9), since the longest path is the critical path.
+
+```{r}
+library(lpSolveAPI)
+
+Network_object<- read.lp("Network.lp")
+
+solve(Network_object)
+
+get.objective(Network_object)
+
+get.variables(Network_object)
+
+get.constraints(Network_object)
+
+```
+
+### Solution
+Running the LP formulation on any LP solver, the critical path is:
+
+From node 1 to 2 
+
+From node 2 to 5 
+
+From node 5 to 7
+
+From node 7 to 9
+
+##### The duration of the project is, therefore 17 time units.
+
+
+## Question 2
+
+An investment manager wants to determine an opti- mal portfolio for a wealthy client. The fund has 2.5 million dollars to invest, and its objective is to maximize total dollar return from both growth and dividends over the course of the coming year. The client has researched eight high-tech companies and wants the portfolio to consist of shares in these firms only. Three of the firms (S1 - S3) are primarily software companies, three (H1-H3) are primarily hardware companies, and two (C1-C2) are internet consulting companies. The client has stipulated that no more than 40 percent of the investment be allocated to any one of these three sectors. To assure diversification, at least $100,000 must be invested in each of the eight stocks. Moreover, the number of shares invested in any stock must be a multiple of 1000.
+
+##### To calculate objective function cost co- efficient:  
+
+Price per share * Growth Rate + Dividend
+
+### With integer restriction.
+
+```{r}
+
+library(lpSolveAPI)
+
+Investment <- read.lp("Investment.lp")
+
+set.type(Investment,c(1:8),type = "integer")
+
+solve(Investment)
+
+get.objective(Investment)
+
+get.variables(Investment)
+
+get.constraints(Investment)
+```
+
+### Without integer restriction. 
+
+```{r}
+
+Real_Investment<- read.lp("Investment.lp")
+
+solve(Real_Investment)
+
+get.objective(Real_Investment)
+
+get.variables(Real_Investment)
+
+get.constraints(Real_Investment)
+
+```
+
+#### By 0.0015601097988854 % the optimal objective solution function value differs. And by 0.01% the optimal investment quantities differ.

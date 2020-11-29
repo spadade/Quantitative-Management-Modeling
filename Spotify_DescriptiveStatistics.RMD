@@ -1,0 +1,120 @@
+---
+title: "Spotify"
+author: "Srushti Padade"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+```yaml
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+```
+## Read the file and glance at the dataset
+
+```{r fig.width=6, fig.height=6, fig.align='center'}
+# To read a data set (.csv file)
+Spotify_object <- read.csv("Spotify_Dataset.csv")
+
+# To check the data
+head(Spotify_object, 5)
+```
+
+## Descriptive Statistics
+
+```{r}
+# To summarize the dataset
+summary(Spotify_object)
+```
+
+### Compute Mean, Median, Mode
+
+```{r}
+# To compute the mean of certain entities from the dataset
+mean(Spotify_object$acousticness)
+
+# To compute the median of certain entities from the dataset
+median(Spotify_object$danceability)
+
+# To compute the mode of certain entities from the dataset
+require(modeest)
+mfv(Spotify_object$duration_ms)
+```
+
+### Compute Min, max, range
+
+```{r}
+# To compute the minimum of certain entities from the dataset
+min(Spotify_object$energy)
+
+# To compute the maximum of certain entities from the dataset
+max(Spotify_object$instrumentalness)
+
+# To compute the range of certain entities from the dataset
+range(Spotify_object$key)
+
+# To compute the interquantile range of certain entities from the dataset
+quantile(Spotify_object$liveness)
+IQR(Spotify_object$loudness)
+```
+
+### Compute Variance, Standard Deviation
+
+```{r}
+# To compute the Variance
+var(Spotify_object$mode)
+
+# To compute the Standard deviation
+sd(Spotify_object$speechiness)
+
+# To compute absolute deviation
+mad(Spotify_object$tempo)
+```
+
+```{r}
+# To compute descriptive statistics
+library(pastecs)
+descriptive_stats <- stat.desc(Spotify_object[, 15])
+round(descriptive_stats, 3)
+```
+
+## Graphical Representation
+
+```{r}
+plot(Spotify_object)
+````
+
+### Line Graph
+
+```{r}
+plot(Spotify_object$target, type="o", ylab="Target")
+```
+
+### Barplot
+
+```{r}
+barplot(Spotify_object$acousticness, xlab ="Acousticness")
+```
+
+### Box plot
+
+```{r}
+library(ggpubr)
+ggboxplot(Spotify_object, y = "valence", width=0.5)
+
+boxplot(Spotify_object$danceability, xlab="X", ylab ="Danceability", main= "Danceability")
+```
+
+### Histogram
+
+```{r}
+hist(Spotify_object$instrumentalness, xlab = "Instrumentalness", main = "Instrumentalness")
+```
+
+### Scatterplot
+
+```{r}
+plot(Spotify_object$liveness, Spotify_object$loudness, xlab="Liveliness", ylab ="Loudness", main = "Liveliness vs Loudness")
+```

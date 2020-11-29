@@ -1,0 +1,97 @@
+---
+title: "Transportation and Assignment Problem"
+author: "Srushti Padade"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(lpSolveAPI)
+```
+
+## Question 1 
+
+Heart Start produces automated external defibrillators (AEDs) in each of two different plants (A and B). The unit production costs and monthly production capacity of the two plants are indicated in the table below. The AEDs are sold through three wholesalers. The shipping cost from each plant to the warehouse of each wholesaler along with the monthly demand from each wholesaler are also indicated in the table. 
+How many AEDs should be produced in each plant, and how should they be distributed to each of the three wholesaler warehouses so as to minimize the combined cost of production and shipping?
+
+### To read the  LP file.
+
+```{r}
+HeartStart_object <- read.lp("HeartStart.lp");
+
+HeartStart_object
+```
+
+### To solve the LP.
+
+```{r}
+solve(HeartStart_object)
+```
+
+### To compute the objective function value.
+
+```{r}
+get.objective(HeartStart_object)
+
+```
+
+### To compute the values of decision variables.
+
+```{r}
+get.variables(HeartStart_object)
+```
+
+### To compute the values of constraints.
+
+```{r}
+get.constraints(HeartStart_object)
+
+```
+
+## Question 2
+Texxon Oil Distributors, Inc., has three active oil wells in a west Texas oil field. Well 1 has a capacity of 93 thousand barrels per day (TBD), Well 2 can produce 88 TBD, and Well 3 can produce 95 TBD. The company has five refineries along the Gulf Coast, all of which have been operating at stable demand levels. 
+
+In addition, three pump stations have been built to move the oil along the pipelines from the wells to the refineries. Oil can flow from any one of the wells to any of the pump stations, and from any one of the pump stations to any of the refineries, and Texxon is looking for a minimum cost schedule.
+
+### To read the  LP file.
+
+```{r}
+OilRefineries_object <- read.lp("OilRefineries.lp");
+
+OilRefineries_object
+```
+
+### To solve the LP.
+
+```{r}
+solve(OilRefineries_object)
+
+```
+
+### To compute the objective function value.
+
+#### Minimal Optimal solution
+
+```{r}
+get.objective(OilRefineries_object)
+
+```
+### To compute the values of decision variables.
+
+```{r}
+get.variables(OilRefineries_object)
+```
+
+### To compute the values of constraints.
+
+```{r}
+get.constraints(OilRefineries_object)
+
+```
+### The Well 2 will obtain us the optimal solution for the transportation problem.
