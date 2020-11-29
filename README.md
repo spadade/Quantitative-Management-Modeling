@@ -9,3 +9,5 @@ Here, I have implemented the below techniques to solve various industrial proble
 - Transportation and Assignment Problem
 - Integer Programming
 - DEA and Goal Programming
+
+NOTE: PLease refer to the R Markdown and HTML files for easy look through.
